@@ -1,0 +1,33 @@
+service:
+  name: yyt-auth
+
+plugins:
+  - serverless-webpack
+
+provider:
+  name: aws
+  stage: ${env:STAGE, "development"}
+  runtime: nodejs10.x
+  region: ap-northeast-2
+  tracing:
+    apiGateway: true
+    lambda: true
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    JWT_SECRET_KEY: ${env:JWT_SECRET_KEY}
+
+functions:
+  simple:
+    handler: src/simple/issue.handle
+    events:
+      - http:
+          method: post
+          path: simple
+  loginWithGoogle:
+    handler: src/google/login.handle
+    events:
+      - http:
+          method: post
+          path: google

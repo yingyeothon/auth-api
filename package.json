@@ -1,0 +1,33 @@
+{
+  "name": "yyt-auth-api",
+  "version": "1.0.0",
+  "description": "Auth API backend for yyt.life",
+  "main": "src/handler.ts",
+  "scripts": {
+    "build": "sls package",
+    "deploy": "sls deploy"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.0",
+    "source-map-support": "^0.5.16"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.36",
+    "@types/jsonwebtoken": "^8.3.5",
+    "@types/node": "10",
+    "@types/node-fetch": "^2.5.4",
+    "fork-ts-checker-webpack-plugin": "^3.1.0",
+    "prettier": "^1.19.1",
+    "serverless": "^1.58.0",
+    "serverless-webpack": "^5.3.1",
+    "ts-loader": "^6.2.1",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.2",
+    "webpack": "^4.41.2",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "author": "jaeyoung.choi <lactrious@gmail.com>",
+  "license": "MIT"
+}
