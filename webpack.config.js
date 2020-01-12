@@ -1,6 +1,5 @@
 const path = require("path");
 const slsw = require("serverless-webpack");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
 module.exports = {
   context: __dirname,
@@ -8,7 +7,7 @@ module.exports = {
   entry: slsw.lib.entries,
   devtool: slsw.lib.webpack.isLocal
     ? "cheap-module-eval-source-map"
-    : "source-map",
+    : "no-source-map",
   resolve: {
     extensions: [".mjs", ".json", ".js", ".ts"],
     symlinks: false,
@@ -39,6 +38,5 @@ module.exports = {
         }
       }
     ]
-  },
-  plugins: [new ForkTsCheckerWebpackPlugin()]
+  }
 };

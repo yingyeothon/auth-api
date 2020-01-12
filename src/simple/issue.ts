@@ -1,20 +1,28 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
-import * as jwt from "jsonwebtoken";
-import { Unauthorized } from "../common";
+import "source-map-support/register";
+import {
+  IAuthorizationPayload,
+  signAuthorization,
+  Unauthorized
+} from "../common";
 
-const expiresIn = "1h";
+interface IAuthentication extends IAuthorizationPayload {
+  name: string;
+  email?: string;
+}
 
 export const handle: APIGatewayProxyHandler = async event => {
   if (!event.body) {
     return Unauthorized;
   }
-  const body = JSON.parse(event.body) as { name: string };
-  if (!body || !body.name) {
+  const { name, applications, email = "unknown@email.address" } = JSON.parse(
+    event.body
+  ) as Partial<IAuthentication>;
+  if (!name || !applications) {
     return Unauthorized;
   }
-  const { name } = body;
   return {
     statusCode: 200,
-    body: jwt.sign({ name }, process.env.JWT_SECRET_KEY!, { expiresIn })
+    body: signAuthorization({ name, email, applications }, "1h")
   };
 };

@@ -1,8 +1,11 @@
 import { APIGatewayProxyHandler } from "aws-lambda";
-import * as jwt from "jsonwebtoken";
 import fetch from "node-fetch";
 import "source-map-support/register";
-import { Unauthorized } from "../common";
+import {
+  IAuthorizationPayload,
+  signAuthorization,
+  Unauthorized
+} from "../common";
 
 const googleProfileApi = `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=`;
 
@@ -27,46 +30,35 @@ interface IGoogleApiError {
   };
 }
 
-const expiresIn = "7d";
+interface IAuthentication extends IAuthorizationPayload {
+  token: string;
+}
 
 export const handle: APIGatewayProxyHandler = async event => {
   if (!event.body) {
     return Unauthorized;
   }
-  const body = JSON.parse(event.body) as { token: string };
-  if (!body || !body.token) {
+  const { token, applications } = JSON.parse(event.body) as IAuthentication;
+  if (!token || !applications) {
     return Unauthorized;
   }
 
   let response: IGoogleProfile | IGoogleApiError;
   try {
-    response = await fetch(`${googleProfileApi}${body.token}`).then(r =>
-      r.json()
-    );
+    response = await fetch(`${googleProfileApi}${token}`).then(r => r.json());
   } catch (error) {
     console.error(`Error while getProfile`, error);
     return Unauthorized;
   }
 
   if ((response as IGoogleApiError).error) {
-    console.error(
-      `Invalid accessToken`,
-      body.token,
-      response as IGoogleApiError
-    );
+    console.error(`Invalid accessToken`, token, response as IGoogleApiError);
     return Unauthorized;
   }
 
-  const profile = response as IGoogleProfile;
+  const { name, email } = response as IGoogleProfile;
   return {
     statusCode: 200,
-    body: jwt.sign(
-      {
-        name: profile.name,
-        email: profile.email
-      },
-      process.env.JWT_SECRET_KEY!,
-      { expiresIn }
-    )
+    body: signAuthorization({ name, email, applications }, "7d")
   };
 };

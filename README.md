@@ -24,6 +24,8 @@ Request:
 POST /simple
 {
   "name": string;
+  "email": string | undefined;
+  "applications": string[];
 }
 ```
 
@@ -38,6 +40,7 @@ POST /google
 
 {
   "token": string;
+  "applications": string[];
 }
 ```
 
