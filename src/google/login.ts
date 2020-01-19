@@ -59,6 +59,11 @@ export const handle: APIGatewayProxyHandler = async event => {
   const { name, email } = response as IGoogleProfile;
   return {
     statusCode: 200,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": true
+    },
     body: signAuthorization({ name, email, applications }, "7d")
   };
 };

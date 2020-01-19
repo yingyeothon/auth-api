@@ -35,9 +35,11 @@ functions:
       - http:
           method: post
           path: simple
+          cors: true
   loginWithGoogle:
     handler: src/google/login.handle
     events:
       - http:
           method: post
           path: google
+          cors: true
