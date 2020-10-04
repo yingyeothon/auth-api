@@ -1,23 +1,25 @@
-import { APIGatewayProxyHandler } from "aws-lambda";
 import "source-map-support/register";
+
 import {
-  IAuthorizationPayload,
+  AuthorizationPayload,
+  Unauthorized,
   signAuthorization,
-  Unauthorized
 } from "../common";
 
-interface IAuthentication extends IAuthorizationPayload {
+import { APIGatewayProxyHandler } from "aws-lambda";
+
+interface Authentication extends AuthorizationPayload {
   name: string;
   email?: string;
 }
 
-export const handle: APIGatewayProxyHandler = async event => {
+export const handle: APIGatewayProxyHandler = async (event) => {
   if (!event.body) {
     return Unauthorized;
   }
   const { name, applications, email = "unknown@email.address" } = JSON.parse(
     event.body
-  ) as Partial<IAuthentication>;
+  ) as Partial<Authentication>;
   if (!name || !applications) {
     return Unauthorized;
   }
@@ -26,8 +28,8 @@ export const handle: APIGatewayProxyHandler = async event => {
     headers: {
       "Content-Type": "text/plain",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
+      "Access-Control-Allow-Credentials": true,
     },
-    body: signAuthorization({ name, email, applications }, "1h")
+    body: signAuthorization({ name, email, applications }, "1h"),
   };
 };

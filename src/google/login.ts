@@ -1,15 +1,17 @@
+import "source-map-support/register";
+
+import {
+  AuthorizationPayload,
+  Unauthorized,
+  signAuthorization,
+} from "../common";
+
 import { APIGatewayProxyHandler } from "aws-lambda";
 import fetch from "node-fetch";
-import "source-map-support/register";
-import {
-  IAuthorizationPayload,
-  signAuthorization,
-  Unauthorized
-} from "../common";
 
 const googleProfileApi = `https://www.googleapis.com/oauth2/v1/userinfo?alt=json&access_token=`;
 
-interface IGoogleProfile {
+interface GoogleProfile {
   id: string;
   email: string;
   verified_email: boolean;
@@ -22,7 +24,7 @@ interface IGoogleProfile {
   hd: string;
 }
 
-interface IGoogleApiError {
+interface GoogleApiError {
   error: {
     code: number;
     message: string;
@@ -30,40 +32,40 @@ interface IGoogleApiError {
   };
 }
 
-interface IAuthentication extends IAuthorizationPayload {
+interface Authentication extends AuthorizationPayload {
   token: string;
 }
 
-export const handle: APIGatewayProxyHandler = async event => {
+export const handle: APIGatewayProxyHandler = async (event) => {
   if (!event.body) {
     return Unauthorized;
   }
-  const { token, applications } = JSON.parse(event.body) as IAuthentication;
+  const { token, applications } = JSON.parse(event.body) as Authentication;
   if (!token || !applications) {
     return Unauthorized;
   }
 
-  let response: IGoogleProfile | IGoogleApiError;
+  let response: GoogleProfile | GoogleApiError;
   try {
-    response = await fetch(`${googleProfileApi}${token}`).then(r => r.json());
+    response = await fetch(`${googleProfileApi}${token}`).then((r) => r.json());
   } catch (error) {
     console.error(`Error while getProfile`, error);
     return Unauthorized;
   }
 
-  if ((response as IGoogleApiError).error) {
-    console.error(`Invalid accessToken`, token, response as IGoogleApiError);
+  if ((response as GoogleApiError).error) {
+    console.error(`Invalid accessToken`, token, response as GoogleApiError);
     return Unauthorized;
   }
 
-  const { name, email } = response as IGoogleProfile;
+  const { name, email } = response as GoogleProfile;
   return {
     statusCode: 200,
     headers: {
       "Content-Type": "text/plain",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Credentials": true
+      "Access-Control-Allow-Credentials": true,
     },
-    body: signAuthorization({ name, email, applications }, "7d")
+    body: signAuthorization({ name, email, applications }, "7d"),
   };
 };
