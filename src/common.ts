@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 export const Unauthorized = { statusCode: 401, body: "Unauthorized" };
 
 export interface AuthorizationPayload {
-  applications: string[];
+  application: string;
 }
 
 interface Authorization extends AuthorizationPayload {
@@ -12,10 +12,10 @@ interface Authorization extends AuthorizationPayload {
 }
 
 export function signAuthorization(
-  { name, email, applications }: Authorization,
+  { name, email, application }: Authorization,
   expiresIn: string | number | undefined
 ): string {
-  return jwt.sign({ name, email, applications }, process.env.JWT_SECRET_KEY!, {
+  return jwt.sign({ name, email, application }, process.env.JWT_SECRET_KEY!, {
     expiresIn,
   });
 }

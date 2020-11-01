@@ -25,7 +25,7 @@ POST /simple
 {
   "name": string;
   "email": string | undefined;
-  "applications": string[];
+  "application": string;
 }
 ```
 
@@ -40,7 +40,7 @@ POST /google
 
 {
   "token": string;
-  "applications": string[];
+  "application": string;
 }
 ```
 

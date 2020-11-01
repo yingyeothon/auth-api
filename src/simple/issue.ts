@@ -17,10 +17,10 @@ export const handle: APIGatewayProxyHandler = async (event) => {
   if (!event.body) {
     return Unauthorized;
   }
-  const { name, applications, email = "unknown@email.address" } = JSON.parse(
+  const { name, application, email = "unknown@email.address" } = JSON.parse(
     event.body
   ) as Partial<Authentication>;
-  if (!name || !applications) {
+  if (!name || !application) {
     return Unauthorized;
   }
   return {
@@ -30,6 +30,6 @@ export const handle: APIGatewayProxyHandler = async (event) => {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": true,
     },
-    body: signAuthorization({ name, email, applications }, "1h"),
+    body: signAuthorization({ name, email, application }, "1h"),
   };
 };

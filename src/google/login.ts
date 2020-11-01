@@ -40,8 +40,8 @@ export const handle: APIGatewayProxyHandler = async (event) => {
   if (!event.body) {
     return Unauthorized;
   }
-  const { token, applications } = JSON.parse(event.body) as Authentication;
-  if (!token || !applications) {
+  const { token, application } = JSON.parse(event.body) as Authentication;
+  if (!token || !application) {
     return Unauthorized;
   }
 
@@ -66,6 +66,6 @@ export const handle: APIGatewayProxyHandler = async (event) => {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Credentials": true,
     },
-    body: signAuthorization({ name, email, applications }, "7d"),
+    body: signAuthorization({ name, email, application }, "7d"),
   };
 };
