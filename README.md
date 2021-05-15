@@ -34,7 +34,7 @@ Response: `JWT({name}, 1h)`
 Request example with cURL.
 
 ```bash
-$ curl -XPOST https://API.DOMAIN.TLD/simple -d '{"name":"lacti","email":"lactrious@gmail.com","applications":["test"]}'
+$ curl -XPOST https://API.DOMAIN.TLD/simple -d '{"name":"lacti","email":"lactrious@gmail.com","application":"test"}'
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoibGFjdGkiLCJlbWFpbCI6ImxhY3RyaW91c0BnbWFpbC5jb20iLCJhcHBsaWNhdGlvbnMiOlsidGVzdCJdLCJpYXQiOjE2MjEwNDQyNDIsImV4cCI6MTYyMTA0Nzg0Mn0.SECRET_ENCODED
 ```
 
@@ -56,6 +56,6 @@ Response: `JWT({name, email}, 7d)`
 Request example with cURL.
 
 ```bash
-$ curl -XPOST https://API.DOMAIN.TLD/google -d '{"token":"GOOGLE_AUTH_TOKEN","applications":["test"]}'
+$ curl -XPOST https://API.DOMAIN.TLD/google -d '{"token":"GOOGLE_AUTH_TOKEN","application":"test"}'
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.PAYLOAD_ENCODED.SECRET_ENCODED
 ```
