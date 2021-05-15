@@ -11,8 +11,17 @@ yarn deploy
 
 ### Environment
 
-- `JWT_SECRET_KEY`
 - `AWS_PROFILE`
+- `STAGE`
+- `JWT_SECRET_KEY`
+
+### `envrc` example
+
+```bash
+export AWS_PROFILE="it-is-me"
+export STAGE="production"
+export JWT_SECRET_KEY="something-very-complex-secret-key"
+```
 
 ## API docs
 
