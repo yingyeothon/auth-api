@@ -1,5 +1,4 @@
-service:
-  name: yyt-auth
+service: yyt-auth
 
 plugins:
   - serverless-webpack
@@ -8,14 +7,16 @@ plugins:
 
 provider:
   name: aws
-  stage: ${env:STAGE, "development"}
+  stage: ${env:STAGE, "dev"}
   runtime: nodejs12.x
   region: ap-northeast-2
+  lambdaHashingVersion: 20201221
   tracing:
     apiGateway: true
     lambda: true
   apiGateway:
     minimumCompressionSize: 1024
+    shouldStartNameWithService: true
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
     JWT_SECRET_KEY: ${env:JWT_SECRET_KEY}
