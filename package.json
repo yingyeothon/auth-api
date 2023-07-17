@@ -9,7 +9,7 @@
     "deploy": "sls deploy"
   },
   "dependencies": {
-    "jsonwebtoken": "^9.0.0",
+    "jsonwebtoken": "^9.0.1",
     "node-fetch": "^2.6.7",
     "source-map-support": "^0.5.19"
   },
